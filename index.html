@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Jumper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- TITLE SCREEN -->
+  <div id="title-screen" class="screen active">
+    <canvas id="title-bg-canvas" class="bg-canvas"></canvas>
+    <div class="title-content">
+      <div class="ant-logo"><canvas id="logo-canvas" width="180" height="180"></canvas></div>
+      <h1 class="game-title">DREAM<br><span>JUMPER</span></h1>
+      <p class="subtitle">A spacefaring ant's endless dream</p>
+      <div class="menu-btns">
+        <button class="btn-play" id="btn-play">&#9654; PLAY</button>
+        <button class="btn-secondary" id="btn-how">HOW TO PLAY</button>
+        <button class="btn-secondary" id="btn-settings-title">&#9881; SETTINGS</button>
+      </div>
+      <div class="high-score-display">BEST: <span id="title-best">0</span>m</div>
+    </div>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div id="how-screen" class="screen">
+    <canvas class="bg-canvas" id="how-bg-canvas"></canvas>
+    <div class="how-content">
+      <h2>HOW TO PLAY</h2>
+      <div class="instructions">
+        <div class="inst-item"><span class="inst-key" id="display-left">&#8592; / A</span><span>Move Left</span></div>
+        <div class="inst-item"><span class="inst-key" id="display-right">&#8594; / D</span><span>Move Right</span></div>
+        <div class="inst-item"><span class="inst-key">AUTO</span><span>Bounces automatically on landing!</span></div>
+        <div class="inst-sep">PLATFORMS</div>
+        <div class="inst-plat dream-plat"><div class="plat-demo"></div><span>Normal &mdash; standard jump</span></div>
+        <div class="inst-plat nightmare-plat"><div class="plat-demo"></div><span>Nightmare &mdash; disappears on land!</span></div>
+        <div class="inst-plat glitch-plat"><div class="plat-demo"></div><span>Glitch &mdash; warps gravity!</span></div>
+        <div class="inst-sep">PICK-UP ITEMS (floating above platforms)</div>
+        <div class="inst-item"><span class="item-badge star-badge">&#9733; STAR</span><span>Massive bounce boost</span></div>
+        <div class="inst-item"><span class="item-badge zap-badge">&#9889; ZAP</span><span>Shield from next glitch</span></div>
+        <div class="inst-sep warn">&#9888; Beware the Shadow Boss below!</div>
+      </div>
+      <button class="btn-play" id="btn-back">&#8592; BACK</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings-screen" class="screen">
+    <canvas class="bg-canvas" id="settings-bg-canvas"></canvas>
+    <div class="settings-content">
+      <h2>&#9881; SETTINGS</h2>
+      <div class="settings-section">
+        <div class="settings-title">AUDIO</div>
+        <div class="settings-row"><span>Sound Effects</span><label class="toggle-wrap"><input type="checkbox" id="sfx-toggle" checked><span class="toggle-slider"></span></label></div>
+        <div class="settings-row"><span>Volume</span><input type="range" id="volume-slider" min="0" max="100" value="70" class="range-slider"><span class="range-val" id="volume-val">70%</span></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-title">KEYBINDS <span class="kb-sub">(click a button, then press a key)</span></div>
+        <div class="settings-row"><span>Move Left</span><button class="keybind-btn" id="kb-left" data-action="left">&#8592; / A</button></div>
+        <div class="settings-row"><span>Move Right</span><button class="keybind-btn" id="kb-right" data-action="right">&#8594; / D</button></div>
+        <p class="keybind-hint" id="keybind-hint"></p>
+      </div>
+      <div class="settings-btns">
+        <button class="btn-play" id="btn-settings-back">&#8592; BACK</button>
+        <button class="btn-secondary" id="btn-settings-reset">RESET DEFAULTS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" class="screen">
+    <div class="hud">
+      <div class="hud-left"><div class="hud-label">HEIGHT</div><div class="hud-val" id="hud-height">0m</div></div>
+      <div class="hud-right"><div class="hud-label">SCORE</div><div class="hud-val" id="hud-score">0</div></div>
+    </div>
+    <canvas id="game-canvas"></canvas>
+    <div class="glitch-overlay" id="glitch-overlay"></div>
+    <div class="boss-vignette" id="boss-vignette"></div>
+    <div class="glitch-text" id="glitch-text">GLITCH!</div>
+    <div class="gravity-indicator" id="gravity-indicator">&#8593; GRAVITY FLIPPED</div>
+    <div class="countdown-overlay" id="countdown-overlay"><div class="countdown-num" id="countdown-num">3</div></div>
+    <div class="pause-overlay" id="pause-overlay">
+      <div class="pause-box">
+        <div class="pause-title">PAUSED</div>
+        <button class="btn-play" id="btn-resume">&#9654; RESUME</button>
+        <button class="btn-secondary" id="btn-pause-settings">&#9881; SETTINGS</button>
+        <button class="btn-secondary" id="btn-pause-menu">&#8962; MAIN MENU</button>
+      </div>
+    </div>
+    <button class="pause-btn" id="btn-pause">&#10073;&#10073;</button>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="gameover-screen" class="screen">
+    <canvas class="bg-canvas" id="go-bg-canvas"></canvas>
+    <div class="gameover-content">
+      <div class="go-ant-wrap"><canvas id="go-canvas" width="160" height="160"></canvas></div>
+      <h2 class="go-title">CAUGHT!</h2>
+      <p class="go-sub">The Shadow swallowed your dream</p>
+      <div class="go-stats">
+        <div class="go-stat"><div class="go-stat-label">HEIGHT</div><div class="go-stat-val" id="go-height">0m</div></div>
+        <div class="go-stat"><div class="go-stat-label">SCORE</div><div class="go-stat-val" id="go-score">0</div></div>
+        <div class="go-stat"><div class="go-stat-label">BEST</div><div class="go-stat-val" id="go-best">0m</div></div>
+      </div>
+      <div class="go-btns">
+        <button class="btn-play" id="btn-retry">&#8635; RETRY</button>
+        <button class="btn-secondary" id="btn-menu">&#8962; MENU</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="game.js"></script>
+</body>
+</html>
