@@ -754,57 +754,27 @@ function pickPlatformType() {
   return 'glitch';
 }
 function diffFactor() { return Math.min(1, maxHeight / 800); }
-function platGap()    { return 55 + Math.random()*45 + diffFactor()*20; }
-function platWidth()  { return Math.max(100, PLAT_W_MIN + Math.random()*(PLAT_W_MAX-PLAT_W_MIN) - diffFactor()*30); }
+function platGap()    { return PLAT_GAP_MIN + Math.random()*(PLAT_GAP_MAX-PLAT_GAP_MIN) + diffFactor()*60; }
+function platWidth()  { return Math.max(70, PLAT_W_MIN + Math.random()*(PLAT_W_MAX-PLAT_W_MIN) - diffFactor()*50); }
 
-let lastPlatCenterX = 0;
-let zoneIndex = 0;
-
-function safeX(w) {
-  // Pure Doodle Jump style: fully random across the whole screen width
-  // Only constraint: don't spawn so close to screen edge that it's cut off
-  const margin = 20;
-  const x = margin + Math.random() * (W - w - margin * 2);
-  lastPlatCenterX = x + w / 2;
-  return x;
-}
-
-function spawnCoin(x, y) {
-  coins.push(new Coin(x, y));
-}
-
-let lastSpawnedPlatX = 0;
-let lastSpawnedPlatY = 0;
-let lastSpawnedPlatW = 0;
-
-function spawnPlatformRow(y, type) {
-  const w = platWidth();
-  const x = safeX(w);
-
-  // Check if this platform is hard to reach from the last one.
-  // Hard = horizontal center distance > 300px OR vertical gap > 130px
-  // In those cases, force spring so the player always has a way up.
-  const horizDist = Math.abs((x + w/2) - (lastSpawnedPlatX + lastSpawnedPlatW/2));
-  const vertDist  = Math.abs(y - lastSpawnedPlatY);
-  if (lastSpawnedPlatY !== 0 && horizDist > 500 && vertDist > 160 && type !== 'spring') {
-    type = 'spring';
-  }
-
-  lastSpawnedPlatX = x;
-  lastSpawnedPlatY = y;
-  lastSpawnedPlatW = w;
-
-  platforms.push(new Platform(x, y, w, type));
-  if (Math.random() < ITEM_SPAWN_CHANCE) {
-    const irand = Math.random();
-    const itype = irand < 0.5 ? 'star' : irand < 0.75 ? 'zap' : 'boost';
-    items.push(new Item(x + w / 2, y - 38, itype));
-  }
-  if (Math.random() < 0.38) {
-    const ccount = Math.floor(Math.random() * 3) + 1;
-    for (let c = 0; c < ccount; c++) {
-      spawnCoin(x + w * 0.15 + c * 24, y - 26 - Math.random() * 18);
+function generatePlatforms(topY, count=28) {
+  platforms=[];
+  items=[];
+  // guaranteed wide first platform directly under player
+  platforms.push(new Platform(W/2-90, topY, 180, 'dream'));
+  let y=topY;
+  for (let i=0;i<count;i++) {
+    y -= platGap();
+    const w = platWidth();
+    // Fully random X across screen width — true Doodle Jump spread
+    const x = Math.random()*(W - w - 40) + 20;
+    const type=pickPlatformType();
+    platforms.push(new Platform(x,y,w,type));
+    if (Math.random()<ITEM_SPAWN_CHANCE) {
+      const itype=Math.random()<0.6?'star':'zap';
+      items.push(new Item(x+w/2, y-38, itype));
     }
+    
   }
 }
 
