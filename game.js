@@ -438,9 +438,17 @@ class Player {
   update() {
     const goLeft  = isKeyDown('left');
     const goRight = isKeyDown('right');
-    if (goLeft)  { this.vx=-PLAYER_SPEED; this.facing=-1; }
-    if (goRight) { this.vx= PLAYER_SPEED; this.facing= 1; }
-    if (!goLeft&&!goRight) this.vx=0;
+    
+    // Determine the intended speed direction
+    const targetVx = goLeft ? -PLAYER_SPEED : goRight ? PLAYER_SPEED : 0;
+    
+    // Smoothly interpolate current velocity towards target (0.2 acts as acceleration/friction)
+    this.vx += (targetVx - this.vx) * 0.2;
+
+    // Update facing direction only if actively moving
+    if (goLeft) this.facing = -1;
+    if (goRight) this.facing = 1;
+
     // AUTO-JUMP on landing (Doodle Jump style) — no button press needed
     if (this.onGround) {
       this.jump(JUMP_FORCE, this.groundType);
