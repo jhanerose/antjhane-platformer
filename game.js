@@ -830,7 +830,12 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+
 function startGame() {
+  // Wake up AudioContext safely upon explicit user click
+  const ac = getAudioCtx();
+  if (ac.state === 'suspended') ac.resume();
+
   stopTitleBG('title-bg-canvas'); stopTitleBG('how-bg-canvas'); stopTitleBG('go-bg-canvas');
   showScreen('game-screen');
   initGame();
