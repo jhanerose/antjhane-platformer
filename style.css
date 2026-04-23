@@ -266,6 +266,27 @@ body {
   );
 }
 
+.moving-plat .plat-demo {
+  background: #00d4ff;
+  box-shadow: 0 0 8px #00d4ff;
+  animation: slide-demo 1.5s ease-in-out infinite alternate;
+}
+
+.spring-plat .plat-demo {
+  background: #ff9f43;
+  box-shadow: 0 0 8px #ff9f43;
+}
+
+.ice-plat .plat-demo {
+  background: linear-gradient(90deg, #a8edea, #c8f8fc);
+  box-shadow: 0 0 8px #a8edea;
+}
+
+@keyframes slide-demo {
+  0%   { transform: translateX(-8px); }
+  100% { transform: translateX(8px); }
+}
+
 .item-badge {
   font-family: var(--font-display);
   font-size: 0.6rem;
