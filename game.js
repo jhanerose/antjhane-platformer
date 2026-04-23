@@ -615,12 +615,24 @@ function generatePlatforms(topY, count=28) {
   }
 }
 function extendPlatforms() {
-  const topY=Math.min(...platforms.map(p=>p.y));
-  let y=topY;
-  while (y>cameraY-H) {
+  const topY = Math.min(...platforms.map(p=>p.y));
+  // Find the x-coordinate of the highest platform to base the next jump on
+  const topPlat = platforms.find(p => p.y === topY);
+  let lastX = topPlat ? topPlat.x : W/2;
+  
+  let y = topY;
+  while (y > cameraY-H) {
     y -= platGap();
     const w = platWidth();
-    const x = Math.random()*(W - w - 40) + 20;
+    
+    // Max horizontal travel = speed * total air time. 450 is a safe max distance.
+    const maxReach = 450; 
+    const minX = Math.max(20, lastX - maxReach);
+    const maxX = Math.min(W - w - 20, lastX + maxReach);
+    
+    const x = minX + Math.random() * (maxX - minX);
+    lastX = x; // Update for the next iteration
+    
     const type=pickPlatformType();
     platforms.push(new Platform(x,y,w,type));
     if (Math.random()<ITEM_SPAWN_CHANCE) {
