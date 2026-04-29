@@ -1,148 +1,179 @@
-# 🐜 Dream Jumper
 
+# 🐜🚀 Dream Jumper
 > *A spacefaring ant's endless dream — jump, dodge, survive.*
 
-A browser-based endless platformer built with vanilla HTML5 Canvas and the Web Audio API. No frameworks. No downloads. Just you, six platform types, and a shadow boss rising from below.
+<p align="center">
+  <img src="assets/img/dreamjumper-gamescreen.gif" width="700" alt="Dream Jumper Gameplay Preview">
+</p>    
+
+<p align="center">
+  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E">
+</p>
+
+> **PLAY NOW!** https://jhanerose.github.io/antjhane-platformer/
+
+
+## 📖 Project Overview
+
+**Dream Jumper** is an original, fast-paced endless platformer built entirely from scratch using vanilla JavaScript and the HTML5 Canvas 2D API. No frameworks. No dependencies. 
+
+Players control a spacefaring ant bouncing upward through an endless, procedurally generated world. Success requires a careful balance of mastering physics-based momentum, navigating six unique platform types, and outrunning a progressive environmental hazard—the Shadow Boss.
+
+Developed as a 14-day sprint for the WebSystems-9318-AY225 Final Project.
 
 ---
 
-## 🎮 Gameplay
+## 🎮 Gameplay & Controls
 
-You control a spacefaring ant bouncing upward through an endless procedurally generated world. Your ant **bounces automatically** on every landing — your only job is to steer left and right. Climb as high as possible without getting caught by the Shadow Boss that chases you from below.
+Your ant **bounces automatically** upon landing. Your primary objective is precise horizontal steering to climb as high as possible without falling into the void or being caught by the ascending shadow.
 
-**Controls**
+| Action | Primary Key | Secondary Key |
+|--------|-------------|---------------|
+| **Move Left** | `A` | `←` Left Arrow |
+| **Move Right**| `D` | `→` Right Arrow |
+| **Pause / Menu**| `Esc` | `P` |
 
-| Key | Action |
-|-----|--------|
-| `←` / `A` | Move left |
-| `→` / `D` | Move right |
-| `Esc` / `P` | Pause / Resume |
+> *Controls can be rebound in the in-game Settings menu.*
 
-> Controls can be rebound in the in-game Settings menu.
+---
+## 🎬 Gameplay Showcase
+
+|                                           Game Screen & UI                                           |                                       Active Gameplay                                       |
+| :--------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+| <img src="assets/img/dreamjumper-gamescreen.gif" width="400" alt="Dream Jumper Game Screen Preview"> | <video src="assets/video/dreamjumper-gameplay.mp4" controls="controls" width="400"></video> |
 
 ---
 
-## 🪐 Platform Types
+## 🪐 Environment & Mechanics
 
-| Platform | Color | Behavior |
-|----------|-------|----------|
-| **Dream** | Purple | Standard bounce — reliable and consistent |
-| **Nightmare** | Red | Crumbles after landing — don't linger |
-| **Glitch** | Amber | Warps gravity on contact — brace yourself |
-| **Moving** | Cyan | Slides side to side — timing is everything |
-| **Spring** | Orange | Mega bounce — launches you sky-high instantly |
-| **Ice** | Light blue | Slippery surface — momentum carries you sideways |
+Navigate a procedurally generated vertical obstacle course featuring distinct platform behaviors and dynamic events.
 
----
+### Platform Types
+| Platform | Visual Identity | Behavior & Physics |
+|----------|----------------|--------------------|
+| **Dream** | Purple | Standard bounce; reliable and consistent. |
+| **Nightmare** | Red | Crumbles upon landing; zero dwell time. |
+| **Glitch** | Amber | Triggers a gravity-warping event on contact. |
+| **Moving** | Cyan | Slides horizontally; requires timing prediction. |
+| **Spring** | Orange | Instantly launches the player at a 2x height multiplier. |
+| **Ice** | Light Blue | Zero friction; momentum carries you sideways. |
 
-## ⚡ Power-Up Items
+### 🌀 The Glitch Event
+Landing on an Amber platform triggers a system glitch:
+* The canvas fills with a scanline CRT overlay.
+* Gravity polarity flips for ~1.8 seconds.
+* Particle emitters explode across the screen.
 
-| Item | Effect |
-|------|--------|
-| ⭐ **Star** | Massive bounce boost — launches you far above normal height |
-| ⚡ **Zap Shield** | Blocks the next glitch gravity-flip event |
-| 🔥 **Boost** | Speed boost for 5 seconds |
-| $ **Coin** | +15 score each; chain multiple for combo multipliers |
+### 👾 The Shadow Boss
+A tentacled shadow creature rises from the bottom of the canvas. It scales its vertical acceleration based on your current score. The higher you climb, the more aggressive the pursuit algorithm becomes.
 
----
-
-## 👾 The Shadow Boss
-
-A tentacled shadow creature rises from below, accelerating as your score increases. It tracks your position and speeds up over time — the higher you climb, the faster it chases. If it catches you, the dream ends.
-
----
-
-## 🌀 Glitch Events
-
-Landing on a **Glitch platform** triggers a glitch event:
-- The screen fills with a scanline overlay
-- Gravity may flip upside-down for ~1.8 seconds
-- Particles explode across the screen
-
-Collect a **Zap Shield** before landing on a glitch platform to block the effect entirely.
+### ⚡ Power-Ups & Items
+* ⭐ **Star:** Massive bounce boost (launches far above normal viewport bounds).
+* ⚡ **Zap Shield:** Nullifies the next Glitch platform gravity-flip event.
+* 🔥 **Boost:** +50% lateral movement speed for 5 seconds.
+* 💰 **Coin:** +15 score. Chaining multiple coins without touching a standard platform builds a combo multiplier.
 
 ---
 
-## 🏆 Scoring
+## 🏆 Scoring System
 
-| Action | Points |
+Your **Personal Best** is automatically tracked and persisted locally via browser `localStorage`.
+
+| Action | Points Awarded |
 |--------|--------|
-| Height climbed | 10 pts per metre |
-| Coin collected | +15 pts |
-| Combo (3+ bounces) | +5 pts × combo count |
-| Height record | Score always matches height × 10 minimum |
-
-Your **personal best** is saved automatically in your browser via `localStorage`.
+| **Vertical Climb** | 10 pts per metre |
+| **Coin Collection** | +15 pts |
+| **Combo Mechanic** | +5 pts × combo count (requires 3+ consecutive bounces) |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Architecture
 
-| Layer | Technology |
+| Layer | Technology Used |
 |-------|-----------|
-| Rendering | HTML5 Canvas 2D API |
-| Audio | Web Audio API (procedural synthesis) |
-| Language | Vanilla JavaScript (ES6+) |
-| Styling | CSS3 with custom properties |
-| Storage | `localStorage` |
-| Fonts | Google Fonts — Orbitron, Space Mono |
+| **Rendering** | HTML5 Canvas 2D API |
+| **Audio** | Web Audio API (Procedural synthesis & spatial audio) |
+| **Logic** | Vanilla JavaScript (ES6+) |
+| **Styling** | CSS3 (Custom properties, Flexbox/Grid) |
+| **Persistence** | Window `localStorage` |
+| **Typography** | Google Fonts (Orbitron, Space Mono) |
 
-No build tools. No dependencies. No frameworks. Open `index.html` in any modern browser and play.
+### 📁 Project Structure
+```text
+antjhane-platformer/
+
+├── assets/
+
+│   └── img/
+
+│       └── antjhane.png
+
+├── css/
+
+│   ├── landing.css
+
+│   └── style.css
+
+├── index.html
+
+├── js/
+
+│   ├── game.js
+
+│   └── script.js
+
+├── landing.html
+
+└── README.md
+```
 
 ---
 
-## 📁 Project Structure
+## ⚙️ Local Installation & Setup
 
-```
-dream-jumper/
-├── index.html       # Game shell — screens, HUD, overlays
-├── style.css        # All game UI styles
-├── game.js          # Full game logic (physics, rendering, input, audio)
-├── landing.html     # Marketing landing page
-├── landing.css      # Landing page styles
-├── landing.js       # Landing page scripts (starfield, ant animation)
-└── README.md        # This file
-```
+To run this project locally without CORS restrictions for image/audio asset loading:
 
----
-
-## 🚀 Getting Started
-
-No installation required. Just open the files locally:
-
-```bash
-# Clone or download the project, then:
-open index.html       # macOS
-start index.html      # Windows
-xdg-open index.html   # Linux
-```
-
-Or serve it with any static file server:
-
-```bash
-npx serve .
-# then visit http://localhost:3000
-```
-
-> **Note:** Some browser features (like `localStorage`) require a server context. Use a local server if anything behaves unexpectedly when opening files directly.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/jhanerose/antjhane-platformer.git
+   ```
+2. **Navigate to the directory:**
+   ```bash
+   cd antjhane-platformer
+   ```
+3. **Serve the files:**
+   Use any local development server. If you have Node.js installed:
+   ```bash
+   npx serve .
+   ```
+   *Alternatively, use the VS Code "Live Server" extension.*
+4. **Play:**
+   Open `http://localhost:3000` (or your server's assigned port) in your web browser.
 
 ---
 
-## 👥 Team
+## 👨‍💻 The Team
 
-Built in a **14-day game development sprint**.
+Developed collaboratively by the **SADICON-DAWINAN** team.
 
-| Role | Contributor |
-|------|-------------|
-| Game Developer · Lead | Student One |
-| Visual Design · UI/UX | Student Two |
+* **Jhane Rose Sadicon**  [jhanerose](https://github.com/jhanerose)
+    * **Role:** Visual Design / UI/UX & Level Dynamics
+* **Anton Sebastian Dawinan** [AntonDawinan](https://github.com/AntonDawinan)
+    * **Role:** Lead Game Developer / Programming & Physics Logic
 
 ---
 
+***
 ## 📄 License
+This GitHub game project was developed under the course **BSIT 2207L – Web Systems and Technologies Lec/Lab (9318-AY225)**  
 
-© 2025 Dream Jumper Team. All rights reserved.
+**Bachelor of Science in Information Technology with Specialization in Game Development (2nd Year)**  
+College of Computer Studies, University of Perpetual Help System DALTA (UPHSD) Molino  
 
----
+The project was developed under the supervision of **Sir Val Fabregas**, who provided the assigned genre pool for development.
 
-*Made with HTML5 Canvas & Web Audio API · No frameworks · Built in 14 days*
+© 2025 Dream Jumper. Developed by AntonDawinan & jhanerose. All rights reserved.
+
+*No frameworks. Built with vanilla JavaScript, Canvas, and Web Audio API ☕*
