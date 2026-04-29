@@ -42,7 +42,7 @@ Your ant **bounces automatically** upon landing. Your primary objective is preci
 
 | Game Screen & UI | Active Gameplay |
 | :---: | :---: |
-| <img src="assets/img/dreamjumper-gamescreen.gif" width="400" alt="Dream Jumper Game Screen Preview"> | <img src="assets/video/dreamjumper-gameplay.mp4" width="400" alt="Dream Jumper Gameplay Preview">
+| <img src="assets/img/dreamjumper-gamescreen.gif" width="400" alt="Dream Jumper Game Screen Preview"> | <img src="assets/video/dreamjumper-gameplay.gif" width="400" alt="Dream Jumper Gameplay Preview">
 ---
 
 ## 🪐 Environment & Mechanics
@@ -161,8 +161,6 @@ Developed collaboratively by the **SADICON-DAWINAN** team.
     * **Role:** Visual Design / UI/UX & Level Dynamics
 * **Anton Sebastian Dawinan** [AntonDawinan](https://github.com/AntonDawinan)
     * **Role:** Lead Game Developer / Programming & Physics Logic
-
----
 
 ***
 ## 📄 License
