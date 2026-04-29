@@ -3,122 +3,273 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dream Jumper</title>
+  <title>Dream Jumper — A Spacefaring Ant's Endless Dream</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="CSS/style.css">
 </head>
-
 <body>
-  <!-- TITLE SCREEN -->
-  <div id="title-screen" class="screen active">
-    <canvas id="title-bg-canvas" class="bg-canvas"></canvas>
-    <div class="title-content">
-      <div class="ant-logo"><canvas id="logo-canvas" width="180" height="180"></canvas></div>
-      <h1 class="game-title">DREAM<br><span>JUMPER</span></h1>
-      <p class="subtitle">A spacefaring ant's endless dream</p>
-      <div class="menu-btns">
-        <button class="btn-play" id="btn-play">&#9654; PLAY</button>
-        <button class="btn-secondary" id="btn-how">HOW TO PLAY</button>
-        <button class="btn-secondary" id="btn-settings-title">&#9881; SETTINGS</button>
-      </div>
-      <div class="high-score-display">BEST: <span id="title-best">0</span>m</div>
-    </div>
-  </div>
 
-  <!-- HOW TO PLAY -->
-  <div id="how-screen" class="screen">
-    <canvas class="bg-canvas" id="how-bg-canvas"></canvas>
-    <div class="how-content">
-      <h2>HOW TO PLAY</h2>
-      <div class="instructions">
-        <div class="inst-item"><span class="inst-key" id="display-left">&#8592; / A</span><span>Move Left</span></div>
-        <div class="inst-item"><span class="inst-key" id="display-right">&#8594; / D</span><span>Move Right</span></div>
-        <div class="inst-item"><span class="inst-key">AUTO</span><span>Bounces automatically on landing!</span></div>
-        <div class="inst-sep">PLATFORMS</div>
-        <div class="inst-plat dream-plat"><div class="plat-demo"></div><span>Normal &mdash; standard jump</span></div>
-        <div class="inst-plat nightmare-plat"><div class="plat-demo"></div><span>Nightmare &mdash; disappears on land!</span></div>
-        <div class="inst-plat glitch-plat"><div class="plat-demo"></div><span>Glitch &mdash; warps gravity!</span></div>
-        <div class="inst-plat moving-plat"><div class="plat-demo"></div><span>Moving &mdash; slides side to side</span></div>
-        <div class="inst-plat spring-plat"><div class="plat-demo"></div><span>Spring &mdash; mega bounce!</span></div>
-        <div class="inst-plat ice-plat"><div class="plat-demo"></div><span>Ice &mdash; slippery landing!</span></div>
-        <div class="inst-sep">PICK-UP ITEMS (floating above platforms)</div>
-        <div class="inst-item"><span class="item-badge star-badge">&#9733; STAR</span><span>Massive bounce boost</span></div>
-        <div class="inst-item"><span class="item-badge zap-badge">&#9889; ZAP</span><span>Shield from next glitch</span></div>
-        <div class="inst-item"><span class="item-badge" style="background:rgba(255,107,107,0.2);color:#ff6b6b;border:1px solid #ff6b6b;">&#128293; BOOST</span><span>Speed boost for 5 seconds</span></div>
-        <div class="inst-item"><span class="item-badge" style="background:rgba(249,199,79,0.2);color:#f9c74f;border:1px solid #f9c74f;">&#36; COIN</span><span>+15 score, chain for combos!</span></div>
-        <div class="inst-sep warn">&#9888; Beware the Shadow Boss below!</div>
-      </div>
-      <button class="btn-play" id="btn-back">&#8592; BACK</button>
-    </div>
-  </div>
+<canvas id="star-canvas"></canvas>
 
-  <!-- SETTINGS -->
-  <div id="settings-screen" class="screen">
-    <canvas class="bg-canvas" id="settings-bg-canvas"></canvas>
-    <div class="settings-content">
-      <h2>&#9881; SETTINGS</h2>
-      <div class="settings-section">
-        <div class="settings-title">AUDIO</div>
-        <div class="settings-row"><span>Sound Effects</span><label class="toggle-wrap"><input type="checkbox" id="sfx-toggle" checked><span class="toggle-slider"></span></label></div>
-        <div class="settings-row"><span>Volume</span><input type="range" id="volume-slider" min="0" max="100" value="70" class="range-slider"><span class="range-val" id="volume-val">70%</span></div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-title">KEYBINDS <span class="kb-sub">(click a button, then press a key)</span></div>
-        <div class="settings-row"><span>Move Left</span><button class="keybind-btn" id="kb-left" data-action="left">&#8592; / A</button></div>
-        <div class="settings-row"><span>Move Right</span><button class="keybind-btn" id="kb-right" data-action="right">&#8594; / D</button></div>
-        <p class="keybind-hint" id="keybind-hint"></p>
-      </div>
-      <div class="settings-btns">
-        <button class="btn-play" id="btn-settings-back">&#8592; BACK</button>
-        <button class="btn-secondary" id="btn-settings-reset">RESET DEFAULTS</button>
-      </div>
-    </div>
-  </div>
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">DREAM JUMPER</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#how-to-play">How to Play</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="landing.html" class="nav-cta">▶ Play Now</a></li>
+  </ul>
+</nav>
 
-  <!-- GAME SCREEN -->
-  <div id="game-screen" class="screen">
-    <div class="hud">
-      <div class="hud-left"><div class="hud-label">HEIGHT</div><div class="hud-val" id="hud-height">0m</div></div>
-      <div class="hud-right"><div class="hud-label">SCORE</div><div class="hud-val" id="hud-score">0</div></div>
-    </div>
-    <canvas id="game-canvas"></canvas>
-    <div class="glitch-overlay" id="glitch-overlay"></div>
-    <div class="boss-vignette" id="boss-vignette"></div>
-    <div class="glitch-text" id="glitch-text">GLITCH!</div>
-    <div class="gravity-indicator" id="gravity-indicator">&#8593; GRAVITY FLIPPED</div>
-    <div class="countdown-overlay" id="countdown-overlay"><div class="countdown-num" id="countdown-num">3</div></div>
-    <div class="pause-overlay" id="pause-overlay">
-      <div class="pause-box">
-        <div class="pause-title">PAUSED</div>
-        <button class="btn-play" id="btn-resume">&#9654; RESUME</button>
-        <button class="btn-secondary" id="btn-pause-settings">&#9881; SETTINGS</button>
-        <button class="btn-secondary" id="btn-pause-menu">&#8962; MAIN MENU</button>
-      </div>
-    </div>
-    <button class="pause-btn" id="btn-pause">&#10073;&#10073;</button>
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-ant-wrap">
+    <canvas id="hero-ant" width="150" height="150"></canvas>
   </div>
+  <p class="hero-eyebrow">Endless Platformer &nbsp;·&nbsp; Space Dream &nbsp;·&nbsp; Browser Game</p>
+  <h1 class="hero-title">
+    <span class="t1">DREAM</span>
+    <span class="t2">JUMPER</span>
+  </h1>
+  <p class="hero-sub">A spacefaring ant's endless dream — jump, dodge, survive.</p>
+  <div class="hero-btns">
+    <a href="landing.html" class="btn-primary">▶ &nbsp;PLAY NOW &nbsp;— FREE</a>
+    <a href="#how-to-play" class="btn-ghost">How to Play ↓</a>
+  </div>
+  <p class="hero-meta">No download &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Runs in your browser &nbsp;·&nbsp; Best on record: <span id="hero-best">—</span>m</p>
+</section>
 
-  <!-- GAME OVER -->
-  <div id="gameover-screen" class="screen">
-    <canvas class="bg-canvas" id="go-bg-canvas"></canvas>
-    <div class="gameover-content">
-      <div class="go-ant-wrap"><canvas id="go-canvas" width="160" height="160"></canvas></div>
-      <h2 class="go-title">CAUGHT!</h2>
-      <p class="go-sub">The Shadow swallowed your dream</p>
-      <div class="go-stats">
-        <div class="go-stat"><div class="go-stat-label">HEIGHT</div><div class="go-stat-val" id="go-height">0m</div></div>
-        <div class="go-stat"><div class="go-stat-label">SCORE</div><div class="go-stat-val" id="go-score">0</div></div>
-        <div class="go-stat"><div class="go-stat-label">BEST</div><div class="go-stat-val" id="go-best">0m</div></div>
+<!-- ══ STATS BAR ══ -->
+<div class="stats-bar">
+  <div class="stat-item reveal"><span class="stat-num">6</span><span class="stat-label">Platform Types</span></div>
+  <div class="stat-item reveal d1"><span class="stat-num">4</span><span class="stat-label">Power-Up Items</span></div>
+  <div class="stat-item reveal d2"><span class="stat-num">∞</span><span class="stat-label">Unique Runs</span></div>
+  <div class="stat-item reveal d3"><span class="stat-num">1</span><span class="stat-label">Shadow Boss</span></div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<section id="features">
+  <div class="section-inner">
+    <div class="features-header reveal">
+      <p class="section-label">Why Dream Jumper?</p>
+      <h2 class="section-title">More than just a jumper</h2>
+      <p class="section-desc">Six platform types, four power-ups, a relentless shadow boss, and gravity that fights back. No two runs are ever the same.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal d1">
+        <span class="feat-icon">🪐</span>
+        <div class="feat-title">6 PLATFORM TYPES</div>
+        <p class="feat-desc">Normal, Nightmare, Glitch, Moving, Spring, and Ice platforms — each with unique physics and surprises that keep every run fresh.</p>
       </div>
-      <div class="go-btns">
-        <button class="btn-play" id="btn-retry">&#8635; RETRY</button>
-        <button class="btn-secondary" id="btn-menu">&#8962; MENU</button>
+      <div class="feat-card reveal d2">
+        <span class="feat-icon">👾</span>
+        <div class="feat-title">SHADOW BOSS</div>
+        <p class="feat-desc">A relentless shadow creeps from below, accelerating as you climb. Fall behind even a moment and the dream ends.</p>
+      </div>
+      <div class="feat-card reveal d3">
+        <span class="feat-icon">⚡</span>
+        <div class="feat-title">POWER-UP ITEMS</div>
+        <p class="feat-desc">Collect Stars, Shields, Speed Boosts, and Coins with combo chains. Time your pickups to skyrocket your score.</p>
+      </div>
+      <div class="feat-card reveal d1">
+        <span class="feat-icon">🌀</span>
+        <div class="feat-title">GRAVITY GLITCHES</div>
+        <p class="feat-desc">Random glitch events flip gravity upside-down mid-run. Grab a Zap shield or master navigating the chaos.</p>
+      </div>
+      <div class="feat-card reveal d2">
+        <span class="feat-icon">🎵</span>
+        <div class="feat-title">DYNAMIC SOUND FX</div>
+        <p class="feat-desc">Procedurally generated audio via the Web Audio API. Every jump, coin, spring, and glitch has its own sonic signature.</p>
+      </div>
+      <div class="feat-card reveal d3">
+        <span class="feat-icon">🏆</span>
+        <div class="feat-title">PERSONAL BESTS</div>
+        <p class="feat-desc">Local high scores saved between sessions. Your record lives in the browser — beat it, then beat it again.</p>
       </div>
     </div>
   </div>
+</section>
 
-  <script src="JS/game.js"></script>
+<div class="divider"></div>
+
+<!-- ══ PLATFORMS ══ -->
+<section id="platforms">
+  <div class="section-inner">
+    <div class="plat-layout">
+      <div class="reveal">
+        <p class="section-label">Platform Guide</p>
+        <h2 class="section-title">Know your ground</h2>
+        <p class="section-desc">Every platform has a personality. Learn them fast — the shadow doesn't wait.</p>
+        <div class="plat-list">
+          <div class="plat-row" style="border-color:rgba(127,90,240,0.35)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#7f5af0,#5535cc);box-shadow:0 0 10px rgba(127,90,240,0.5)"></div>
+            <div><div class="plat-name" style="color:#b09af0">DREAM</div><div class="plat-desc">Standard bounce — reliable and consistent</div></div>
+          </div>
+          <div class="plat-row" style="border-color:rgba(255,107,107,0.3)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#ff6b6b,#cc3333);box-shadow:0 0 10px rgba(255,107,107,0.5)"></div>
+            <div><div class="plat-name" style="color:#ff6b6b">NIGHTMARE</div><div class="plat-desc">Crumbles after landing — don't linger</div></div>
+          </div>
+          <div class="plat-row" style="border-color:rgba(255,209,102,0.3)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#ffd166,#cc9900);box-shadow:0 0 10px rgba(255,209,102,0.5)"></div>
+            <div><div class="plat-name" style="color:#ffd166">GLITCH</div><div class="plat-desc">Warps gravity on contact — brace yourself</div></div>
+          </div>
+          <div class="plat-row" style="border-color:rgba(0,212,255,0.3)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#00d4ff,#0088aa);box-shadow:0 0 10px rgba(0,212,255,0.5)"></div>
+            <div><div class="plat-name" style="color:#00d4ff">MOVING</div><div class="plat-desc">Slides side to side — timing is everything</div></div>
+          </div>
+          <div class="plat-row" style="border-color:rgba(255,159,67,0.3)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#ff9f43,#cc6600);box-shadow:0 0 10px rgba(255,159,67,0.5)"></div>
+            <div><div class="plat-name" style="color:#ff9f43">SPRING</div><div class="plat-desc">Mega bounce — launches you sky-high instantly</div></div>
+          </div>
+          <div class="plat-row" style="border-color:rgba(168,237,234,0.3)">
+            <div class="plat-swatch" style="background:linear-gradient(90deg,#a8edea,#66cccc);box-shadow:0 0 10px rgba(168,237,234,0.35)"></div>
+            <div><div class="plat-name" style="color:#a8edea">ICE</div><div class="plat-desc">Slippery surface — momentum carries you sideways</div></div>
+          </div>
+        </div>
+      </div>
+      <div id="plat-canvas-wrap" class="reveal d2">
+        <canvas id="plat-canvas" width="320" height="490"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ HOW TO PLAY ══ -->
+<section id="how-to-play">
+  <div class="section-inner">
+    <div class="how-header reveal">
+      <p class="section-label">Getting Started</p>
+      <h2 class="section-title">How to Play</h2>
+      <p class="section-desc">Easy to pick up, impossible to put down.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal d1">
+        <div class="how-num">01</div>
+        <div class="how-title">STEER SIDEWAYS</div>
+        <p class="how-desc">Use <span class="key">←</span> <span class="key">→</span> or <span class="key">A</span> <span class="key">D</span> to move left and right. Rebind in Settings.</p>
+      </div>
+      <div class="how-step reveal d2">
+        <div class="how-num">02</div>
+        <div class="how-title">AUTO-BOUNCE</div>
+        <p class="how-desc">No jump button — your ant bounces automatically on every landing. Focus entirely on horizontal positioning.</p>
+      </div>
+      <div class="how-step reveal d3">
+        <div class="how-num">03</div>
+        <div class="how-title">GRAB ITEMS</div>
+        <p class="how-desc">Collect glowing power-ups hovering above platforms. Stars, shields, boosts, and coin combos can flip your run.</p>
+      </div>
+      <div class="how-step reveal d4">
+        <div class="how-num">04</div>
+        <div class="how-title">OUTRUN SHADOW</div>
+        <p class="how-desc">The Shadow Boss rises from below, getting faster over time. Keep climbing. If it catches you — game over.</p>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="items-header reveal">
+      <p class="section-label">Power-Up Items</p>
+    </div>
+    <div class="items-grid">
+      <div class="item-card reveal d1" style="border-color:rgba(127,90,240,0.35)">
+        <span class="item-icon">⭐</span>
+        <div class="item-name" style="color:#b09af0">STAR</div>
+        <p class="item-desc">Massive bounce boost — launches you far above normal platform height in one leap.</p>
+      </div>
+      <div class="item-card reveal d2" style="border-color:rgba(0,212,255,0.3)">
+        <span class="item-icon">⚡</span>
+        <div class="item-name" style="color:#00d4ff">ZAP SHIELD</div>
+        <p class="item-desc">Protects you from the next gravity-flip glitch event. A lifesaver at high altitudes.</p>
+      </div>
+      <div class="item-card reveal d3" style="border-color:rgba(255,107,107,0.3)">
+        <span class="item-icon">🔥</span>
+        <div class="item-name" style="color:#ff6b6b">BOOST</div>
+        <p class="item-desc">Speed boost for 5 seconds — zip across platforms faster and stay ahead of the shadow.</p>
+      </div>
+      <div class="item-card reveal d4" style="border-color:rgba(249,199,79,0.3)">
+        <span class="item-icon">$</span>
+        <div class="item-name" style="color:#f9c74f">COIN</div>
+        <p class="item-desc">+15 score each. Chain multiple coins in quick succession for bonus combo multipliers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ TEAM ══ -->
+<section id="team">
+  <div class="section-inner">
+    <div class="team-header reveal">
+      <p class="section-label">The Crew</p>
+      <h2 class="section-title">Meet the Team</h2>
+      <p class="section-desc">Built in a 14-day sprint by two developers with a dream and a spacefaring ant.</p>
+    </div>
+    <div class="team-grid">
+      <!-- ↓↓ UPDATE: Replace name, role, description, and GitHub URL ↓↓ -->
+      <div class="team-card reveal d1">
+        <div class="team-avatar" style="background:rgba(127,90,240,0.12);border-color:rgba(127,90,240,0.3)">🐜</div>
+        <div class="team-name">Anton Dawinan</div>
+        <div class="team-role">Game Developer · Lead</div>
+        <p class="team-desc">Designed the core game loop, platform physics engine, item system, shadow boss AI, and procedural audio.</p>
+        <div class="team-links">
+          <a href="https://github.com/AntonDawinan" target="_blank" rel="noopener" class="team-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+      <div class="team-card reveal d2">
+        <div class="team-avatar" style="background:rgba(44,182,125,0.12);border-color:rgba(44,182,125,0.3)">🚀</div>
+        <div class="team-name">Jhane Sandicon</div>
+        <div class="team-role">Visual Design · UI/UX</div>
+        <p class="team-desc">Crafted the art direction, all UI screens, the ant spacesuit character, and the animated starfield backgrounds.</p>
+        <div class="team-links">
+          <a href="https://github.com/jhanerose" target="_blank" rel="noopener" class="team-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="team-sprint reveal">Built during a 14-day game development sprint &nbsp;·&nbsp; Made with HTML5 Canvas &amp; Web Audio API &nbsp;·&nbsp; No frameworks</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ CTA ══ -->
+<div class="cta-wrap">
+  <div class="cta-glow"></div>
+  <p class="section-label reveal">Ready to Jump?</p>
+  <h2 class="cta-title reveal">Enter the Dream</h2>
+  <p class="cta-sub reveal">No install. No sign-up. Just you, the platforms, and the shadow chasing you from below.</p>
+  <div class="reveal">
+    <a href="landing.html" class="btn-primary" style="font-size:1rem;padding:1.1rem 3.2rem;">▶ &nbsp;PLAY DREAM JUMPER</a>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <span class="footer-brand">DREAM JUMPER</span>
+  <span class="footer-note">© 2025 Dream Jumper Team. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#how-to-play">How to Play</a>
+    <a href="#team">Team</a>
+    <a href="landing.html">Play</a>
+  </div>
+</footer>
+
+<script src="JS/script.js"></script>
 </body>
 </html>
