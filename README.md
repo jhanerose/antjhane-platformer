@@ -40,10 +40,9 @@ Your ant **bounces automatically** upon landing. Your primary objective is preci
 ---
 ## 🎬 Gameplay Showcase
 
-|                                           Game Screen & UI                                           |                                       Active Gameplay                                       |
-| :--------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-| <img src="assets/img/dreamjumper-gamescreen.gif" width="400" alt="Dream Jumper Game Screen Preview"> | <video src="assets/video/dreamjumper-gameplay.mp4" controls="controls" width="400"></video> |
-
+| Game Screen & UI | Active Gameplay |
+| :---: | :---: |
+| <img src="assets/img/dreamjumper-gamescreen.gif" width="400" alt="Dream Jumper Game Screen Preview"> | <img src="assets/video/dreamjumper-gameplay.mp4" width="400" alt="Dream Jumper Gameplay Preview">
 ---
 
 ## 🪐 Environment & Mechanics
