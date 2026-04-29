@@ -60,7 +60,7 @@ const keys = {};
 let player, platforms, items, coins, boss;
 let cameraY = 0, score = 0, maxHeight = 0, emotion = 0.5;
 let gravityDir = 1, gravityFlipped = false;
-let glitchActive = false, nextGlitch = 0, glitchShield = false;
+let glitchActive = false, glitchShield = false;
 let particles = [], stars = [];
 let bestScore = parseInt(localStorage.getItem('dj_best') || '0');
 let countdownValue = 3, countdownRAF;
@@ -385,17 +385,20 @@ class Platform {
     const {x,w,h}=this; const y=sy; const r=h/2;
 
     if (this.type==='glitch') {
-      ctx.save(); ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.clip();
-      const sw=10;
-      for (let i=0;i<w;i+=sw*2) {
-        ctx.fillStyle=COLORS.glitch; ctx.fillRect(x+i,y,sw,h);
-        ctx.fillStyle=COLORS.nightmare; ctx.fillRect(x+i+sw,y,sw,h);
-      }
-      ctx.restore();
+      if (qp().shadows) { ctx.shadowColor=COLORS.glitch; ctx.shadowBlur=18+Math.sin(this.phase*3)*6; }
+      ctx.beginPath(); ctx.roundRect(x+2,y+4,w,h,r);
+      ctx.fillStyle='rgba(80,50,0,0.45)'; ctx.fill();
+      ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+      const ggrad = ctx.createLinearGradient(x,y,x,y+h);
+      ggrad.addColorStop(0,'#ffe066');
+      ggrad.addColorStop(0.45,COLORS.glitch);
+      ggrad.addColorStop(1,'#aa7700');
+      ctx.fillStyle=ggrad; ctx.fill();
+      ctx.shadowBlur=0;
       ctx.beginPath(); ctx.roundRect(x+6,y+3,w-12,4,2);
-      ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=1.5;
-      ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,0.38)'; ctx.fill();
+      ctx.beginPath(); ctx.roundRect(x+4,y+h-4,w-8,3,1.5);
+      ctx.fillStyle='rgba(0,0,0,0.25)'; ctx.fill();
 
     } else if (this.type==='moving') {
       // Moving: cyan glowing platform
@@ -877,6 +880,9 @@ function checkPlatformCollisions() {
       player.onGround=false;
       break;
     }
+    if (plat.type==='glitch') {
+      triggerGlitch();
+    }
     if (plat.type==='ice') {
       player.iceSliding=true;
       sfxIce();
@@ -930,7 +936,7 @@ function checkCoinCollisions() {
 // ── GLITCH ───────────────────────────────────
 function triggerGlitch() {
   if (glitchActive) return;
-  if (glitchShield) { glitchShield=false; nextGlitch=Date.now()+GLITCH_INTERVAL[0]+Math.random()*(GLITCH_INTERVAL[1]-GLITCH_INTERVAL[0]); return; }
+  if (glitchShield) { glitchShield=false; return; }
   glitchActive=true; sfxGlitch();
   if (Math.random()<0.5) {
     gravityDir=-gravityDir; gravityFlipped=true;
@@ -942,7 +948,6 @@ function triggerGlitch() {
   go.classList.add('active'); gt.classList.add('show');
   spawnGlitchParticles();
   setTimeout(()=>{ go.classList.remove('active'); gt.classList.remove('show'); glitchActive=false; }, GLITCH_DURATION);
-  nextGlitch=Date.now()+GLITCH_INTERVAL[0]+Math.random()*(GLITCH_INTERVAL[1]-GLITCH_INTERVAL[0]);
 }
 
 // ── HUD ──────────────────────────────────────
@@ -1014,7 +1019,6 @@ function initGame() {
   cameraY=0; score=0; maxHeight=0; emotion=0.5;
   gravityDir=1; gravityFlipped=false;
   glitchActive=false; glitchShield=false;
-  nextGlitch=Date.now()+8000+Math.random()*5000;
   particles=[]; comboCount=0; comboTimer=0;
   speedBoostActive=false; speedBoostTimer=0;
   const startPlatY = H*0.65;
@@ -1068,7 +1072,6 @@ function gameLoop(timestamp) {
   boss.update();
   if (boss.isCaught()) { endGame(); return; }
   if (player.y-cameraY>H+60) { endGame(); return; }
-  if (!glitchActive&&Date.now()>nextGlitch) triggerGlitch();
   updateParticles();
   drawBG(); drawStars(cameraY);
   for (const p of platforms) { p.update(); p.draw(ctx,cameraY); }
