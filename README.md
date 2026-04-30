@@ -80,24 +80,22 @@ Your **Personal Best** is automatically tracked and persisted locally via browse
 | **Combo Mechanic** | +5 pts × combo count (requires 3+ consecutive bounces) |
 
 ---
-
 ## 🛠️ Tech Stack & Architecture
+
 <p align="center">
-  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
-  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
-  <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E">
+  <img src="https://skillicons.dev/icons?i=html,css,js" />
 </p>
 
-| Layer | Technology Used |
-|-------|-----------|
-| **Rendering** | HTML5 Canvas 2D API |
-| **Audio** | Web Audio API (Procedural synthesis & spatial audio) |
-| **Logic** | Vanilla JavaScript (ES6+) |
-| **Styling** | CSS3 (Custom properties, Flexbox/Grid) |
-| **Persistence** | Window `localStorage` |
-| **Typography** | Google Fonts (Orbitron, Space Mono) |
+| Layer        | Tech | Description |
+|--------------|------|------------|
+| 🎨 **Rendering** | HTML5 Canvas | Real-time 2D rendering using Canvas API |
+| 🔊 **Audio** | Web Audio API | Procedural sound + spatial effects |
+| 🧠 **Logic** | JavaScript (ES6+) | Core game systems & physics |
+| 🎭 **Styling** | CSS3 | Flexbox, Grid, custom properties |
+| 💾 **Storage** | `localStorage` | Saves high scores locally |
+| 🔤 **Typography** | Google Fonts | Orbitron & Space Mono |
 
-### 📁 Project Structure
+## 📁 Project Structure
 ```text
 antjhane-platformer/
 ├── assets/
