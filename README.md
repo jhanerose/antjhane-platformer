@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <a href="https://jhanerose.github.io/antjhane-platformer/">
-    <img src="https://img.shields.io/badge/PLAY%20NOW-FF2E63?style=for-the-badge&logo=gamepad&logoColor=white" />
+  <a href="https://jhanerose.github.io/antjhane-platformer/landing.html">
+    <img src="https://img.shields.io/badge/PLAY%20NOW-9F2EFF?style=for-the-badge&logo=gamepad&logoColor=white" />
   </a>
 </p>
 
