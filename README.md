@@ -6,7 +6,37 @@
   <img src="assets/img/dreamjumper-gamescreen.gif" width="700" alt="Dream Jumper Gameplay Preview">
 </p>
 
-> **PLAY NOW!** https://jhanerose.github.io/antjhane-platformer/
+<p align="center">
+  <a href="https://jhanerose.github.io/antjhane-platformer/">
+    <img src="https://img.shields.io/badge/PLAY%20NOW-FF2E63?style=for-the-badge&logo=gamepad&logoColor=white" />
+  </a>
+</p>
+
+---
+## ✨ Key Features
+
+- 🚀 Procedurally generated endless gameplay
+- 🧠 Physics-based movement and momentum system
+- 👾 Dynamic Shadow Boss with scaling difficulty
+- 🌀 Real-time glitch events with gravity inversion
+- ⚡ Multiple power-ups with strategic effects
+- 💾 Local score persistence using `localStorage`
+- 🎧 Procedural audio using Web Audio API
+
+---
+
+## 🎯 Why This Project?
+
+This project demonstrates how complex game systems can be built **without frameworks**, focusing on:
+
+- Low-level Canvas rendering  
+- Real-time game loop architecture  
+- Physics simulation and event systems  
+- Modular JavaScript design  
+
+It highlights strong fundamentals in **game development, performance optimization, and system design**.
+
+---
 
 ## 📖 Project Overview
 
@@ -138,14 +168,25 @@ To run this project locally without CORS restrictions for image/audio asset load
 
 ## 👨‍💻 The Team
 
-Developed collaboratively by the **SADICON-DAWINAN** team.
+<p align="center">
+  <img src="https://img.shields.io/badge/Jhane%20Rose%20Sadicon-UI%2FUX%20%26%20Level%20Design-8A2BE2?style=for-the-badge&logo=figma&logoColor=white" />
+  <img src="https://img.shields.io/badge/Anton%20Sebastian%20Dawinan-Game%20Dev%20%26%20Physics%20Logic-14B8A6?style=for-the-badge&logo=javascript&logoColor=white" />
+</p>
 
-* **Jhane Rose Sadicon**  [jhanerose](https://github.com/jhanerose)
-    * **Role:** Visual Design / UI/UX & Level Dynamics
-* **Anton Sebastian Dawinan** [AntonDawinan](https://github.com/AntonDawinan)
-    * **Role:** Lead Game Developer / Programming & Physics Logic
+<p align="center">
+  <a href="https://github.com/jhanerose">
+    <img src="https://img.shields.io/badge/@jhanerose-181717?style=flat-square&logo=github&logoColor=white" />
+  </a>
+  <a href="https://github.com/AntonDawinan">
+    <img src="https://img.shields.io/badge/@AntonDawinan-181717?style=flat-square&logo=github&logoColor=white" />
+  </a>
+</p>
 
-***
+<p align="center">
+  Developed collaboratively by the <b>SADICON-DAWINAN</b> team.
+</p>
+
+---
 ## 📄 License
 This GitHub game project was developed under the course **BSIT 2207L – Web Systems and Technologies Lec/Lab (9318-AY225)**  
 
