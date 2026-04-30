@@ -87,6 +87,7 @@ Your **Personal Best** is automatically tracked and persisted locally via browse
   <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
   <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E">
 </p>
+
 | Layer | Technology Used |
 |-------|-----------|
 | **Rendering** | HTML5 Canvas 2D API |
@@ -99,32 +100,19 @@ Your **Personal Best** is automatically tracked and persisted locally via browse
 ### 📁 Project Structure
 ```text
 antjhane-platformer/
-
 ├── assets/
-
-│   └── img/
-
-│       └── antjhane.png
-
+│   ├── img/
+│   └── video/
 ├── css/
-
 │   ├── landing.css
-
 │   └── style.css
-
 ├── index.html
-
 ├── js/
-
 │   ├── game.js
-
 │   └── script.js
-
 ├── landing.html
-
 └── README.md
 ```
-
 ---
 
 ## ⚙️ Local Installation & Setup
