@@ -803,6 +803,35 @@ body {
   flex: 1;
 }
 
+#mobile-controls {
+  position: fixed;
+  bottom: 25px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 35px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#mobile-controls button {
+  pointer-events: auto;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: none;
+  font-size: 30px;
+  color: white;
+  background: rgba(127, 90, 240, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(127, 90, 240, 0.3);
+  transition: transform 0.1s ease;
+}
+
+#mobile-controls button:active {
+  transform: scale(0.9);
+}
+
 /* ── ANIMATIONS ──────────────────────────── */
 
 @keyframes float {
