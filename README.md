@@ -195,6 +195,6 @@ College of Computer Studies, University of Perpetual Help System DALTA (UPHSD) M
 
 The project was developed under the supervision of **Sir Val Fabregas**, who provided the assigned genre pool for development.
 
-© 2025 Dream Jumper. Developed by AntonDawinan & jhanerose. All rights reserved.
+© 2026 Dream Jumper. Developed by AntonDawinan & jhanerose. All rights reserved.
 
 *No frameworks. Built with vanilla JavaScript, Canvas, and Web Audio API ☕*
