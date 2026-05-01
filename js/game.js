@@ -1245,6 +1245,7 @@ function setupSkinsScreen() {
       localStorage.setItem('dj_skin', activeSkin);
       document.querySelectorAll('.skin-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
+      drawAntLogo(document.getElementById('logo-canvas'), 180);
     });
     grid.appendChild(card);
     // Draw ant with this skin
