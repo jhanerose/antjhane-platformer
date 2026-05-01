@@ -1,6 +1,6 @@
 
 # 🐜🚀 Dream Jumper
-> *A spacefaring ant's endless dream — jump, dodge, survive.*
+> *A spacefaring ant's endless dream — jump, dodge, survive.🌌🔭*
 
 <p align="center">
   <img src="assets/img/dreamjumper-gamescreen.gif" width="700" alt="Dream Jumper Gameplay Preview">
