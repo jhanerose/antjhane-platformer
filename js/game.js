@@ -34,13 +34,13 @@ function resetSettings() {
   applySettingsToUI();
 }
 
-// ── CONSTANTS (FIXED DUPLICATES REMOVED) ──
+// ── CONSTANTS ──────────────────────────────
 const GAME_SCALE = 1;
 const WORLD_SCALE = GAME_SCALE;
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const MOBILE_VIEW_ADJUST = isMobile ? 0.9 : 1;
-
+const MOBILE_PLAT_SCALE = isMobile ? 0.65 : 1;
 const GRAVITY    = 0.42;
 const JUMP_FORCE = -15.5;
 const ITEM_JUMP_FORCE = -21;
@@ -51,9 +51,9 @@ const PLAYER_SPEED = 10;
 const PLAT_GAP_MIN = 80 * MOBILE_VIEW_ADJUST;
 const PLAT_GAP_MAX = 130 * MOBILE_VIEW_ADJUST;
 
-const PLAT_W_MIN = 110 * GAME_SCALE;
-const PLAT_W_MAX = 185 * GAME_SCALE;
 
+const PLAT_W_MIN = 110 * GAME_SCALE * MOBILE_PLAT_SCALE;
+const PLAT_W_MAX = 185 * GAME_SCALE * MOBILE_PLAT_SCALE;
 const BOSS_SPEED_BASE = 0.55;
 
 const GLITCH_INTERVAL = [7000, 14000];
@@ -844,7 +844,9 @@ function pickPlatformType() {
 }
 function diffFactor() { return Math.min(1, maxHeight / 800); }
 function platGap() {
-  return (55 + Math.random()*45 + diffFactor()*20) * GAME_SCALE;
+  // 👇 Adds 20% more vertical space between platforms on mobile
+  const mobileGapBoost = isMobile ? 1.2 : 1; 
+  return (55 + Math.random()*45 + diffFactor()*20) * GAME_SCALE * mobileGapBoost;
 }
 function platWidth()  { return Math.max(100, PLAT_W_MIN + Math.random()*(PLAT_W_MAX-PLAT_W_MIN) - diffFactor()*30); }
 
