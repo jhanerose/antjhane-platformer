@@ -22,6 +22,8 @@
       <div class="menu-btns">
         <button class="btn-play" id="btn-play">&#9654; PLAY</button>
         <button class="btn-secondary" id="btn-how">HOW TO PLAY</button>
+        <button class="btn-secondary" id="btn-skins">&#128736; SKINS</button>
+        <button class="btn-secondary" id="btn-leaderboard">&#127942; LEADERBOARD</button>
         <button class="btn-secondary" id="btn-settings-title">&#9881; SETTINGS</button>
       </div>
       <div class="high-score-display">BEST: <span id="title-best">0</span>m</div>
@@ -75,6 +77,32 @@
         <button class="btn-play" id="btn-settings-back">&#8592; BACK</button>
         <button class="btn-secondary" id="btn-settings-reset">RESET DEFAULTS</button>
       </div>
+      <div class="settings-section">
+        <div class="settings-title">PLAYER NAME <span class="kb-sub">(shown on leaderboard)</span></div>
+        <div class="settings-row"><span>Name (up to 8 chars)</span><input type="text" id="player-name-input" maxlength="8" class="name-input" placeholder="ANT" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKINS SCREEN -->
+  <div id="skins-screen" class="screen">
+    <canvas class="bg-canvas" id="skins-bg-canvas"></canvas>
+    <div class="skins-content">
+      <h2>&#128736; SKINS</h2>
+      <p class="skins-sub">Pick your spacesuit</p>
+      <div id="skins-grid" class="skins-grid"></div>
+      <button class="btn-play" id="btn-skins-back">&#8592; BACK</button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD SCREEN -->
+  <div id="leaderboard-screen" class="screen">
+    <canvas class="bg-canvas" id="lb-bg-canvas"></canvas>
+    <div class="lb-content">
+      <h2>&#127942; LEADERBOARD</h2>
+      <p class="lb-sub">Top 10 Dream Jumpers</p>
+      <div id="title-leaderboard" class="lb-table"></div>
+      <button class="btn-play" id="btn-lb-back">&#8592; BACK</button>
     </div>
   </div>
 
@@ -122,6 +150,11 @@
       <div class="go-btns">
         <button class="btn-play" id="btn-retry">&#8635; RETRY</button>
         <button class="btn-secondary" id="btn-menu">&#8962; MENU</button>
+      </div>
+      <div class="go-lb-wrap">
+        <div class="go-lb-title">&#127942; TOP RUNS</div>
+        <div id="go-leaderboard" class="lb-table lb-compact"></div>
+        <button class="btn-secondary go-lb-full" id="btn-go-leaderboard">VIEW FULL LEADERBOARD</button>
       </div>
     </div>
   </div>
