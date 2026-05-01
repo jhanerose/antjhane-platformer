@@ -32,11 +32,13 @@ const GRAVITY         = 0.42;
 const JUMP_FORCE      = -15.5;
 const ITEM_JUMP_FORCE = -21;
 const SPRING_FORCE    = -26;
-const PLAYER_SPEED    = 10;
+const PLAYER_SPEED    = 10;  // restored to original
 const PLAT_GAP_MIN    = 80;
 const PLAT_GAP_MAX    = 130;
-const PLAT_W_MIN      = 110;
-const PLAT_W_MAX      = 185;
+// Mobile gets smaller platforms so it's not auto-win
+const IS_MOBILE = /Mobi|Android|iPhone|iPad|iPod|Touch/i.test(navigator.userAgent) || window.innerWidth < 600;
+const PLAT_W_MIN      = IS_MOBILE ? 70  : 110;
+const PLAT_W_MAX      = IS_MOBILE ? 120 : 185;
 const BOSS_SPEED_BASE = 0.55;
 const GLITCH_INTERVAL = [7000, 14000];
 const GLITCH_DURATION = 1800;
@@ -68,6 +70,34 @@ let titleBGCanvas, titleBGCtx;
 let settingsCallerScreen = 'title-screen';
 let comboCount = 0, comboTimer = 0;
 let speedBoostActive = false, speedBoostTimer = 0;
+
+// ── SKINS ──────────────────────────────────
+const SKINS = [
+  { id:'classic',  name:'Classic',   suit:'#d0c4f0', body:'#baaee0', helm:'#ede8ff', visor:'#160a28', accent1:'#7f5af0', accent2:'#2cb67d', joint:'#9080c8', desc:'The OG spacesuit' },
+  { id:'inferno',  name:'Inferno',   suit:'#f0d4c4', body:'#e0b4a0', helm:'#fff0e0', visor:'#280a0a', accent1:'#ff6b2b', accent2:'#ffd166', joint:'#c88060', desc:'Forged in solar wind' },
+  { id:'phantom',  name:'Phantom',   suit:'#c4c4d0', body:'#a0a0bc', helm:'#e8e8f0', visor:'#0a0a28', accent1:'#00d4ff', accent2:'#a0ffe0', joint:'#8080c0', desc:'Ghost of the nebula' },
+  { id:'venom',    name:'Venom',     suit:'#c4f0c4', body:'#a0e0a0', helm:'#e0ffe0', visor:'#001a00', accent1:'#2cb67d', accent2:'#7fff00', joint:'#60c860', desc:'Toxic dreamspace' },
+  { id:'void',     name:'Void',      suit:'#1a1a2e', body:'#16213e', helm:'#0f3460', visor:'#e94560', accent1:'#e94560', accent2:'#ff2975', joint:'#533483', desc:'Born from the abyss' },
+  { id:'antjhane', name:'Antjhane',  suit:'#f9c74f', body:'#f3722c', helm:'#fffde7', visor:'#1a1a00', accent1:'#f9c74f', accent2:'#f3722c', joint:'#f8961e', desc:"Antjhane's signature" },
+];
+let activeSkin = localStorage.getItem('dj_skin') || 'classic';
+function getSkin() { return SKINS.find(s=>s.id===activeSkin) || SKINS[0]; }
+
+// ── LEADERBOARD ────────────────────────────
+const LB_KEY = 'dj_leaderboard_v1';
+function loadLeaderboard() {
+  try { return JSON.parse(localStorage.getItem(LB_KEY) || '[]'); } catch(e){ return []; }
+}
+function saveToLeaderboard(scoreVal, height) {
+  const lb = loadLeaderboard();
+  const name = getPlayerName();
+  lb.push({ name, score: scoreVal, height, date: Date.now() });
+  lb.sort((a,b)=>b.score - a.score);
+  lb.splice(10);
+  localStorage.setItem(LB_KEY, JSON.stringify(lb));
+}
+function getPlayerName() { return (localStorage.getItem('dj_player_name') || 'ANT').toUpperCase().slice(0,8); }
+function setPlayerName(n) { localStorage.setItem('dj_player_name', n.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8) || 'ANT'); }
 
 // FPS tracking
 let lastFrameTime = 0;
@@ -123,31 +153,32 @@ function drawAnt(c, x, y, s, facing, isJumping, seed) {
   const t = Date.now() / 380 + (seed || 0);
   const leg = isJumping ? 0.5 : Math.sin(t) * 0.45;
 
+  const sk = getSkin();
   c.beginPath();
   c.ellipse(0, 14, 14, 18, 0, 0, Math.PI*2);
-  c.fillStyle = '#d0c4f0'; c.fill();
-  c.strokeStyle = '#9880d0'; c.lineWidth = 1.2; c.stroke();
+  c.fillStyle = sk.suit; c.fill();
+  c.strokeStyle = sk.joint; c.lineWidth = 1.2; c.stroke();
   c.strokeStyle = 'rgba(100,80,200,0.3)'; c.lineWidth = 1;
   [-2,6,12].forEach(yy => { c.beginPath(); c.moveTo(-11,yy); c.lineTo(11,yy); c.stroke(); });
 
   c.beginPath();
   c.ellipse(0, -5, 9, 8, 0, 0, Math.PI*2);
-  c.fillStyle = '#baaee0'; c.fill();
-  c.strokeStyle = '#9080c0'; c.lineWidth = 1; c.stroke();
+  c.fillStyle = sk.body; c.fill();
+  c.strokeStyle = sk.joint; c.lineWidth = 1; c.stroke();
 
   c.beginPath();
   c.arc(0, -20, 14, 0, Math.PI*2);
-  c.fillStyle = '#ede8ff'; c.fill();
+  c.fillStyle = sk.helm; c.fill();
   c.strokeStyle = '#a090d0'; c.lineWidth = 1.5; c.stroke();
 
   c.beginPath();
   c.arc(0, -20, 14, Math.PI*0.85, Math.PI*2.15);
-  c.strokeStyle = '#7f5af0'; c.lineWidth = 2; c.stroke();
+  c.strokeStyle = sk.accent1; c.lineWidth = 2; c.stroke();
 
   c.beginPath();
   c.ellipse(2, -20, 10, 10, 0, 0, Math.PI*2);
-  c.fillStyle = '#160a28'; c.fill();
-  c.strokeStyle = '#7f5af0'; c.lineWidth = 1.2; c.stroke();
+  c.fillStyle = sk.visor; c.fill();
+  c.strokeStyle = sk.accent1; c.lineWidth = 1.2; c.stroke();
 
   c.beginPath();
   c.ellipse(-2, -24, 3.5, 2.5, -0.4, 0, Math.PI*2);
@@ -163,11 +194,11 @@ function drawAnt(c, x, y, s, facing, isJumping, seed) {
   c.beginPath(); c.moveTo(-6,-30); c.quadraticCurveTo(-12,-36,a1x,a1y); c.stroke();
   c.beginPath(); c.moveTo( 6,-30); c.quadraticCurveTo( 12,-36,a2x,a2y); c.stroke();
   c.beginPath(); c.arc(a1x,a1y, 2.5, 0, Math.PI*2);
-  c.fillStyle = '#7f5af0'; c.fill();
+  c.fillStyle = sk.accent1; c.fill();
   c.beginPath(); c.arc(a2x,a2y, 2.5, 0, Math.PI*2);
-  c.fillStyle = '#2cb67d'; c.fill();
+  c.fillStyle = sk.accent2; c.fill();
 
-  c.strokeStyle = '#7060a8'; c.lineWidth = 2; c.lineCap = 'round';
+  c.strokeStyle = sk.joint; c.lineWidth = 2; c.lineCap = 'round';
   const legData = [
     [-11,  6, -22, 20,  0],
     [-10, -3, -21, 10,  1],
@@ -185,16 +216,16 @@ function drawAnt(c, x, y, s, facing, isJumping, seed) {
     c.quadraticCurveTo(kx+swing*0.3, ky, ex+swing, ey+Math.cos(leg+ph)*3);
     c.stroke();
     c.beginPath(); c.arc(ex+swing, ey+Math.cos(leg+ph)*3, 1.5, 0, Math.PI*2);
-    c.fillStyle = '#9080c8'; c.fill();
+    c.fillStyle = sk.joint; c.fill();
   }
 
   c.beginPath(); c.roundRect(-6, -1, 12, 14, 3);
-  c.fillStyle = '#c4b4e4'; c.fill();
-  c.strokeStyle = '#9080c0'; c.lineWidth = 1; c.stroke();
-  c.fillStyle = '#7f5af0'; c.font = 'bold 5px monospace'; c.textAlign = 'center';
+  c.fillStyle = sk.suit; c.fill();
+  c.strokeStyle = sk.joint; c.lineWidth = 1; c.stroke();
+  c.fillStyle = sk.accent1; c.font = 'bold 5px monospace'; c.textAlign = 'center';
   c.fillText('O\u2082', 0, 10);
   c.beginPath(); c.roundRect(-2,-3,4,4,1);
-  c.fillStyle = '#a090d0'; c.fill();
+  c.fillStyle = sk.body; c.fill();
 
   // Speed boost flame trail
   if (speedBoostActive) {
@@ -336,6 +367,7 @@ class Platform {
       this.moveSpeed = (Math.random()*1.4+0.8) * (Math.random()<0.5?1:-1);
       this.moveRange = Math.random()*90+60;
       this.startX = x;
+      this.vx = this.moveSpeed * 0.6;
     }
     // Ice: player slides on it
     this.icy = (type==='ice');
@@ -370,10 +402,15 @@ class Platform {
     }
     if (this.type==='glitch') this.wobble=Math.sin(this.phase*3)*4;
     if (this.type==='moving') {
-      this.x = this.startX + Math.sin(this.phase * this.moveSpeed * 0.8) * this.moveRange;
-      // Clamp within screen
-      if (this.x < 10) { this.x = 10; this.moveSpeed *= -1; }
-      if (this.x + this.w > W - 10) { this.x = W - this.w - 10; this.moveSpeed *= -1; }
+      this.x += this.vx;
+      if (this.x < 10) {
+        this.x = 10;
+        this.vx = Math.abs(this.vx);
+      }
+      if (this.x + this.w > W - 10) {
+        this.x = W - this.w - 10;
+        this.vx = -Math.abs(this.vx);
+      }
     }
     if (this.springAnim > 0) this.springAnim -= 0.08;
   }
@@ -416,7 +453,7 @@ class Platform {
       ctx.fillStyle='rgba(255,255,255,0.45)';
       ctx.font='bold 9px monospace';
       ctx.textAlign='center'; ctx.textBaseline='middle';
-      const arrowChar = this.moveSpeed>0?'»':'«';
+      const arrowChar = this.vx>0?'»':'«';
       ctx.fillText(arrowChar, x+w/2, y+h/2);
       ctx.beginPath(); ctx.roundRect(x+6,y+3,w-12,4,2);
       ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.fill();
@@ -803,11 +840,9 @@ function spawnPlatformRow(y, type) {
     const itype = irand < 0.5 ? 'star' : irand < 0.75 ? 'zap' : 'boost';
     items.push(new Item(x + w / 2, y - 38, itype));
   }
-  if (Math.random() < 0.38) {
-    const ccount = Math.floor(Math.random() * 3) + 1;
-    for (let c = 0; c < ccount; c++) {
-      spawnCoin(x + w * 0.15 + c * 24, y - 26 - Math.random() * 18);
-    }
+  // One coin centered above 40–70% of platforms
+  if (Math.random() < (0.4 + Math.random() * 0.3)) {
+    spawnCoin(x + w / 2, y - 26);
   }
 }
 
@@ -890,7 +925,7 @@ function checkPlatformCollisions() {
     if (plat.type==='nightmare'&&!plat.touched) { plat.touched=true; plat.touchTime=Date.now(); }
     // Moving platform: transfer horizontal velocity
     if (plat.type==='moving') {
-      player.x += plat.moveSpeed * 0.5;
+      player.x += plat.vx * 0.5;
     }
     // Combo counter for consecutive fast bounces
     comboCount++;
@@ -1116,14 +1151,81 @@ function startCountdown(callback) {
   tick();
 }
 
-// ── GAME OVER ────────────────────────────────
+// ── LEADERBOARD RENDER ───────────────────────
+function renderLeaderboard(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const lb = loadLeaderboard();
+  if (lb.length === 0) { el.innerHTML = '<div class="lb-empty">No runs yet — be the first!</div>'; return; }
+  el.innerHTML = lb.map((e,i) => {
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`<span class="lb-rank">#${i+1}</span>`;
+    return `<div class="lb-row ${i===0?'lb-first':''}">
+      <span class="lb-medal">${medal}</span>
+      <span class="lb-name">${e.name}</span>
+      <span class="lb-score">${e.score}</span>
+      <span class="lb-height">${e.height}m</span>
+    </div>`;
+  }).join('');
+}
+
+// ── SKINS SCREEN SETUP ────────────────────────
+function setupSkinsScreen() {
+  const grid = document.getElementById('skins-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SKINS.forEach(skin => {
+    const card = document.createElement('div');
+    card.className = 'skin-card' + (skin.id === activeSkin ? ' active' : '');
+    card.dataset.id = skin.id;
+    // Mini canvas preview
+    const cv = document.createElement('canvas');
+    cv.width = 80; cv.height = 90;
+    card.appendChild(cv);
+    const label = document.createElement('div');
+    label.className = 'skin-name';
+    label.textContent = skin.name;
+    card.appendChild(label);
+    const desc = document.createElement('div');
+    desc.className = 'skin-desc';
+    desc.textContent = skin.desc;
+    card.appendChild(desc);
+    card.addEventListener('click', () => {
+      activeSkin = skin.id;
+      localStorage.setItem('dj_skin', activeSkin);
+      document.querySelectorAll('.skin-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+    grid.appendChild(card);
+    // Draw ant with this skin
+    const prevSkin = activeSkin;
+    activeSkin = skin.id;
+    drawAntLogo(cv, 80);
+    activeSkin = prevSkin;
+  });
+}
+
+// ── PLAYER NAME SETUP ───────────────────────
+function setupPlayerName() {
+  const inp = document.getElementById('player-name-input');
+  if (!inp) return;
+  inp.value = getPlayerName();
+  inp.addEventListener('input', () => {
+    const v = inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+    inp.value = v;
+    setPlayerName(v);
+  });
+}
+
+
 function endGame() {
   gameState='dead';
   cancelAnimationFrame(raf);
   if (maxHeight>bestScore) { bestScore=maxHeight; localStorage.setItem('dj_best',bestScore); }
+  saveToLeaderboard(score, maxHeight);
   document.getElementById('go-height').textContent=maxHeight+'m';
   document.getElementById('go-score').textContent=score;
   document.getElementById('go-best').textContent=bestScore+'m';
+  renderLeaderboard('go-leaderboard');
   drawAntLogo(document.getElementById('go-canvas'),160);
   showScreen('gameover-screen');
   startTitleBG('go-bg-canvas');
@@ -1258,12 +1360,41 @@ window.addEventListener('DOMContentLoaded',()=>{
     showScreen('title-screen'); startTitleBG('title-bg-canvas');
   });
 
+  // Skins
+  document.getElementById('btn-skins').addEventListener('click', () => {
+    setupSkinsScreen();
+    showScreen('skins-screen');
+    startTitleBG('skins-bg-canvas');
+  });
+  document.getElementById('btn-skins-back').addEventListener('click', () => {
+    stopTitleBG('skins-bg-canvas');
+    showScreen('title-screen');
+  });
+
+  // Leaderboard (title)
+  document.getElementById('btn-leaderboard').addEventListener('click', () => {
+    renderLeaderboard('title-leaderboard');
+    showScreen('leaderboard-screen');
+    startTitleBG('lb-bg-canvas');
+  });
+  document.getElementById('btn-lb-back').addEventListener('click', () => {
+    stopTitleBG('lb-bg-canvas');
+    showScreen('title-screen');
+  });
+  // Leaderboard from game over
+  document.getElementById('btn-go-leaderboard').addEventListener('click', () => {
+    renderLeaderboard('title-leaderboard');
+    showScreen('leaderboard-screen');
+    startTitleBG('lb-bg-canvas');
+  });
+
   setupSettingsUI();
   applySettingsToUI();
+  setupPlayerName();
 
   window.addEventListener('resize',()=>{
     W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight;
-    ['title-bg-canvas','how-bg-canvas','settings-bg-canvas','go-bg-canvas'].forEach(id=>{
+    ['title-bg-canvas','how-bg-canvas','settings-bg-canvas','go-bg-canvas','skins-bg-canvas','lb-bg-canvas'].forEach(id=>{
       const c=document.getElementById(id);
       if (c) { c.width=window.innerWidth; c.height=window.innerHeight; }
     });
