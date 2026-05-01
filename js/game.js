@@ -1,8 +1,8 @@
 "use strict";
 /* ═══════════════════════════════════════════════
-   DREAM JUMPER — game.js
-   v2: more platforms, moving platforms, FPS boost,
-   new mechanics: speed boost, spring, ice, coin combo
+    DREAM JUMPER — game.js
+    v2: more platforms, moving platforms, FPS boost,
+    new mechanics: speed boost, spring, ice, coin combo
 ═══════════════════════════════════════════════ */
 
 // ── SETTINGS ─────────────────────────────────
@@ -91,9 +91,27 @@ function loadLeaderboard() {
 function saveToLeaderboard(scoreVal, height) {
   const lb = loadLeaderboard();
   const name = getPlayerName();
-  lb.push({ name, score: scoreVal, height, date: Date.now() });
-  lb.sort((a,b)=>b.score - a.score);
+
+  // 1. Check if the player is already on the leaderboard
+  const existingPlayerIndex = lb.findIndex(entry => entry.name === name);
+
+  if (existingPlayerIndex !== -1) {
+    // 2. Player exists! Only update if the new score is better.
+    if (scoreVal > lb[existingPlayerIndex].score) {
+      lb[existingPlayerIndex].score = scoreVal;
+      lb[existingPlayerIndex].height = height;
+      lb[existingPlayerIndex].date = Date.now();
+    }
+  } else {
+    // 3. Player does not exist, add them as a new entry.
+    lb.push({ name, score: scoreVal, height, date: Date.now() });
+  }
+
+  // 4. Sort from highest to lowest and keep only the top 10
+  lb.sort((a, b) => b.score - a.score);
   lb.splice(10);
+  
+  // 5. Save back to local storage
   localStorage.setItem(LB_KEY, JSON.stringify(lb));
 }
 function getPlayerName() { return (localStorage.getItem('dj_player_name') || 'ANT').toUpperCase().slice(0,8); }
