@@ -1,4 +1,5 @@
 "use strict";
+
 /* ═══════════════════════════════════════════════
     DREAM JUMPER — game.js
     v2: more platforms, moving platforms, FPS boost,
@@ -7,51 +8,77 @@
 
 // ── SETTINGS ─────────────────────────────────
 const settings = {
-  sfx: true, volume: 0.7,
+  sfx: true,
+  volume: 0.7,
   quality: 'medium',
   keys: { left: ['ArrowLeft','a'], right: ['ArrowRight','d'] }
 };
+
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem('dj_settings') || 'null');
-    if (s) { Object.assign(settings, s); }
+    if (s) Object.assign(settings, s);
   } catch(e){}
 }
+
 function saveSettings() {
   localStorage.setItem('dj_settings', JSON.stringify(settings));
 }
+
 function resetSettings() {
-  settings.sfx = true; settings.volume = 0.7;
+  settings.sfx = true;
+  settings.volume = 0.7;
   settings.quality = 'medium';
   settings.keys = { left: ['ArrowLeft','a'], right: ['ArrowRight','d'] };
-  saveSettings(); applySettingsToUI();
+  saveSettings();
+  applySettingsToUI();
 }
 
-// ── CONSTANTS ─────────────────────────────────
-const GRAVITY         = 0.42;
-const JUMP_FORCE      = -15.5;
+// ── CONSTANTS (FIXED DUPLICATES REMOVED) ──
+const GAME_SCALE = 1;
+const WORLD_SCALE = GAME_SCALE;
+
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+const MOBILE_VIEW_ADJUST = isMobile ? 0.9 : 1;
+
+const GRAVITY    = 0.42;
+const JUMP_FORCE = -15.5;
 const ITEM_JUMP_FORCE = -21;
-const SPRING_FORCE    = -26;
-const PLAYER_SPEED    = 10;  // restored to original
-const PLAT_GAP_MIN    = 80;
-const PLAT_GAP_MAX    = 130;
-// Mobile gets smaller platforms so it's not auto-win
-const IS_MOBILE = /Mobi|Android|iPhone|iPad|iPod|Touch/i.test(navigator.userAgent) || window.innerWidth < 600;
-const PLAT_W_MIN      = IS_MOBILE ? 70  : 110;
-const PLAT_W_MAX      = IS_MOBILE ? 120 : 185;
+const SPRING_FORCE = -26;
+
+const PLAYER_SPEED = 10;
+
+const PLAT_GAP_MIN = 80 * MOBILE_VIEW_ADJUST;
+const PLAT_GAP_MAX = 130 * MOBILE_VIEW_ADJUST;
+
+const PLAT_W_MIN = 110 * GAME_SCALE;
+const PLAT_W_MAX = 185 * GAME_SCALE;
+
 const BOSS_SPEED_BASE = 0.55;
+
 const GLITCH_INTERVAL = [7000, 14000];
 const GLITCH_DURATION = 1800;
-const NIGHTMARE_FADE    = 1300;
-const NIGHTMARE_GONE    = 5000;
+
+const NIGHTMARE_FADE = 1300;
+const NIGHTMARE_GONE = 5000;
 const NIGHTMARE_RESPAWN = 1000;
+
 const ITEM_SPAWN_CHANCE = 0.22;
 
 const COLORS = {
-  accent:'#7f5af0', accent2:'#2cb67d', coral:'#ff6b6b',
-  amber:'#ffd166', text:'#e8e0f5', muted:'#6e6a80',
-  dream:'#7f5af0', nightmare:'#ff6b6b', glitch:'#ffd166',
-  moving:'#00d4ff', spring:'#ff9f43', ice:'#a8edea', coin:'#f9c74f',
+  accent:'#7f5af0',
+  accent2:'#2cb67d',
+  coral:'#ff6b6b',
+  amber:'#ffd166',
+  text:'#e8e0f5',
+  muted:'#6e6a80',
+  dream:'#7f5af0',
+  nightmare:'#ff6b6b',
+  glitch:'#ffd166',
+  moving:'#00d4ff',
+  spring:'#ff9f43',
+  ice:'#a8edea',
+  coin:'#f9c74f',
 };
 
 // ── STATE ─────────────────────────────────────
@@ -59,6 +86,10 @@ let canvas, ctx, W, H;
 let gameState = 'title';
 let raf;
 const keys = {};
+let mobileInput = {
+  left: 0,
+  right: 0
+};
 let player, platforms, items, coins, boss;
 let cameraY = 0, score = 0, maxHeight = 0, emotion = 0.5;
 let gravityDir = 1, gravityFlipped = false;
@@ -165,7 +196,7 @@ function sfxIce()       { playTone(180, 'sine', 0.15, 0.1); }
 // ── ANT SPACESUIT DRAWING ─────────────────────
 function drawAnt(c, x, y, s, facing, isJumping, seed) {
   c.save();
-  c.translate(x, y);
+  c.translate(x * WORLD_SCALE, y * WORLD_SCALE);
   if (facing < 0) { c.scale(-s, s); } else { c.scale(s, s); }
 
   const t = Date.now() / 380 + (seed || 0);
@@ -812,7 +843,9 @@ function pickPlatformType() {
   return 'glitch';
 }
 function diffFactor() { return Math.min(1, maxHeight / 800); }
-function platGap()    { return 55 + Math.random()*45 + diffFactor()*20; }
+function platGap() {
+  return (55 + Math.random()*45 + diffFactor()*20) * GAME_SCALE;
+}
 function platWidth()  { return Math.max(100, PLAT_W_MIN + Math.random()*(PLAT_W_MAX-PLAT_W_MIN) - diffFactor()*30); }
 
 let lastPlatCenterX = 0;
@@ -1281,7 +1314,13 @@ function startGame() {
 
 // ── INPUT ─────────────────────────────────────
 function isKeyDown(action) {
-  return settings.keys[action].some(k=>keys[k.toLowerCase()]);
+  const keyboard = settings.keys[action].some(k => keys[k.toLowerCase()]);
+
+  const mobile = action === 'left'
+    ? mobileInput.left > 0
+    : mobileInput.right > 0;
+
+  return keyboard || mobile;
 }
 document.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
@@ -1291,6 +1330,38 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
 
+// ── MOBILE CONTROLS ──
+function bindMobileControls() {
+  const leftBtn = document.getElementById('btn-left');
+  const rightBtn = document.getElementById('btn-right');
+  const press = (dir) => {
+  mobileInput[dir] = 1;
+};
+  const release = (dir) => {
+  mobileInput[dir] = 0;
+};
+
+  // LEFT
+  leftBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    press('left');
+  });
+  leftBtn.addEventListener('touchend', () => release('left'));
+
+  // RIGHT
+  rightBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    press('right');
+  });
+  rightBtn.addEventListener('touchend', () => release('right'));
+
+  // optional mouse support (for testing on PC)
+  leftBtn.addEventListener('mousedown', () => press('left'));
+  leftBtn.addEventListener('mouseup', () => release('left'));
+
+  rightBtn.addEventListener('mousedown', () => press('right'));
+  rightBtn.addEventListener('mouseup', () => release('right'));
+}
 // ── SETTINGS UI ──────────────────────────────
 function applySettingsToUI() {
   document.getElementById('sfx-toggle').checked    = settings.sfx;
@@ -1419,4 +1490,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 
   showScreen('title-screen');
+  bindMobileControls();
 });
+
+
